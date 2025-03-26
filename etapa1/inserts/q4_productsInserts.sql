@@ -11,7 +11,7 @@ BEGIN
             'Produto ' || i::TEXT, 
             'Descrição do produto ' || i::TEXT, 
             brand_id, 
-            ROUND((RANDOM() * 900 + 100)::NUMERIC, 2), -- Converte para NUMERIC antes de arredondar
+            ROUND((RANDOM() * 999 + 1)::NUMERIC, 2), -- Converte para NUMERIC antes de arredondar
             FLOOR(RANDOM() * 100 + 1) -- Gera um estoque entre 1 e 100
         );
     END LOOP;
