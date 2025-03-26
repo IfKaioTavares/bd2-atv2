@@ -7,18 +7,23 @@ DECLARE
     end_date TIMESTAMP;
     usage_limit INT;
 BEGIN 
-    FOR i IN 1..500 LOOP
+    FOR i IN 1..5000 LOOP
         -- Gera um código de cupom único
         coupon_code := 'CUPOM' || LPAD(i::TEXT, 5, '0');
 
         -- Gera um desconto aleatório entre 5% e 50%, múltiplo de 5
         discount := (FLOOR(RANDOM() * 10) * 5 + 5)::NUMERIC;
 
-        -- Define a data de início como hoje
-        start_date := NOW();
+        -- Define a data de início como um dia aleatório entre 60 dias atrás e hoje
+        start_date := NOW() - (FLOOR(RANDOM() * 61) * INTERVAL '1 day');
 
-        -- Define a data de término entre 30 e 90 dias após a data de início
-        end_date := start_date + (30 + FLOOR(RANDOM() * 60)) * INTERVAL '1 day';
+        -- Define a data de término como um dia aleatório entre 60 dias antes e 90 dias após a data de início
+        end_date := start_date + ((-60 + FLOOR(RANDOM() * 151)) * INTERVAL '1 day');
+
+        -- Garante que a data de término não seja antes da data de início
+        IF end_date < start_date THEN
+            end_date := start_date; 
+        END IF;
 
         -- Define um limite de uso aleatório entre 10 e 1000
         usage_limit := FLOOR(RANDOM() * 991 + 10);
