@@ -1,0 +1,1 @@
+pg_dump -U postgres -F c -f backup_diario.dump bd2-atv2
