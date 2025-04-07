@@ -1,9 +1,9 @@
 INSERT INTO dw.fact_sales
-      (order_id, product_id, date_id, customer_id, payment_method_id,
-       coupon_id, qty, unit_price, discount_pct, total_price)
+      (order_id, product_key, date_key, customer_key, payment_method_key,
+       coupon_key, qty, unit_price, discount_pct, total_price)
 SELECT  o.id,
         oi.product_id,
-        o.created_at::date AS date_id,
+        dd.date_key,
         o.user_id,
         o.payment_method_id,
         o.coupon_id,
@@ -13,6 +13,7 @@ SELECT  o.id,
         o.total_price
 FROM public.orders o
 JOIN public.order_items oi ON oi.order_id = o.id
-LEFT JOIN public.coupons   c ON c.id = o.coupon_id
+JOIN dw.dim_date dd ON dd.full_date = o.created_at::date
+LEFT JOIN public.coupons c ON c.id = o.coupon_id
 LEFT JOIN dw.fact_sales fs ON fs.order_id = o.id
 WHERE fs.order_id IS NULL;
